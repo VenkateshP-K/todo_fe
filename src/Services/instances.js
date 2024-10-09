@@ -1,24 +1,21 @@
-import axios from 'axios'
+import axios from 'axios';
 
-//assign baseurl
-const baseURL = 'https://todo-be-nlai.onrender.com/api'
+const baseURL = 'https://todo-be-nlai.onrender.com/api';
 
-//create instance
+// create an axios instance
 const instance = axios.create({
     baseURL,
     headers: {
-        'Content-Type': 'application/json'
-    }
-})
+        'Content-Type': 'application/json',
+    },
+});
 
-//create protected instance
 const protectedInstance = axios.create({
     baseURL,
     headers: {
         'Content-Type': 'application/json',
-        withCredentials: true
-    }
-})
+    },
+    withCredentials: true,
+});
 
-//export
-export { instance, protectedInstance }
+export { instance, protectedInstance };

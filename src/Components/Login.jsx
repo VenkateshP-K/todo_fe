@@ -1,70 +1,65 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import userServices from '../Services/userServices'
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import userServices from "../Services/userServices";
 
-function Login() {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+const Login = () => {
 
-    const Navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    const handleLogin = (e) => {
-        e.preventDefault();
+  const navigate = useNavigate();
 
-        if (!email || !password) {
-            alert("All fields are required");
-            return;
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+        const response = await userServices.Login(email, password);
+        
+        // Ensure response and data are not undefined
+        if (response && response.data) {
+            // Successfully logged in
+            //console.log("Login successful:", response.data);
+            navigate('/dashboard'); // Redirect to dashboard
+        } else {
+            throw new Error("Login failed: No data returned from server");
         }
-
-        if (password.length < 6) {
-            alert("Password must be at least 6 characters long.");
-            return;
-        }
-
-        //perform user login
-        userServices.Login(email, password)
-            .then((res) => {
-                alert(res.data.message)
-
-                //clear the form
-                setEmail("")
-                setPassword("")
-
-                setTimeout(() => {
-                    Navigate("/dashboard")
-                }, 500)
-            }).catch((err) => {
-                alert(err.response.data.message)
-            })
+    } catch (error) {
+        console.error("Login error:", error.message || error);
+        alert(error.response?.data?.message || "An error occurred during login.");
     }
-    return (
+};
+
+  return (
         <div className="container mt-5">
-            <div className="row">
-                <div className="col-md-6 offset-md-3">
-                    <div className="card">
-                        <div className='card-header'>
-                            Login
-                        </div>
-                        <div className="card-body">
-                            <form onSubmit={handleLogin}>
-                                <div className="mb-3">
-                                    <label className="form-label">Email address</label>
-                                    <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={email} onChange={(e) => setEmail(e.target.value)} />
-                                    <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
-                                </div>
-                                <div className="mb-3">
-                                    <label className="form-label">Password</label>
-                                    <input type="password" className="form-control" id="exampleInputPassword1" value={password} onChange={(e) => setPassword(e.target.value)} />
-                                </div>
-                                <button type="submit" className="btn btn-primary">Submit</button>
-                                <p>Don't have an account?<Link to="/register">Register</Link></p>
-                            </form>
-                        </div>
-                    </div>
+          <div className="row">
+            <div className="col-md-6 offset-md-3">
+              <div className="card">
+                <div className="card-header" style={{ textAlign: "center" ,backgroundColor:"black", color:"white"}}>
+                  Login
                 </div>
+                <div className="card-body">
+                  <form onSubmit={handleLogin}>
+                    <div className="mb-3">
+                      <label htmlFor="email" className="form-label">Email</label>
+                  <input type="email" className="form-control" id="email" 
+                    value={email} onChange={(e) => setEmail(e.target.value)}
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="password" className="form-label">Password</label>
+                  <input type="password" className="form-control" id="password" 
+                    value={password} onChange={(e) => setPassword(e.target.value)}
+                      />
+                    </div>
+                    <button type="submit" className="btn btn-primary">Login</button>
+              </form>
+              <br />
+              <p>Don't have an account? <Link to="/register">Register</Link></p>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-    )
+  )
 }
 
-export default Login
+export default Login;
