@@ -71,9 +71,9 @@ const Todos = () => {
                 {filteredTodos.map((todo) => (  // Use filteredTodos instead of todos
                     <div key={todo._id} className="col-md-4 mb-4">
                         <div className={`card ${todo.Status ? 'border-dark' : 'border-light'}`}>
-                            <div className="card-body" style={{ height: 200 }}>
-                                <h5 className="card-title" style={{ color: "wheat" }}>{todo.title}</h5>
-                                <h3 className="card-text" style={{ color: "wheat" }}>{todo.description}</h3>
+                            <div className="card-body">
+                                <h4 className="card-title" style={{ color: "wheat" }}>{todo.title}</h4>
+                                <h6 className="card-text" style={{ color: "wheat" }}>{todo.description}</h6>
                                 <button
                                     className={`btn btn-sm ${todo.Status ? 'btn-secondary' : 'btn-success'} me-2`}
                                     onClick={() => handleToggleStatus(todo._id, todo.Status)}
